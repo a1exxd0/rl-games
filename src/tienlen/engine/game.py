@@ -62,7 +62,7 @@ def _fits_table(state: GameState, hand: tuple[Card, ...], play: Play) -> bool:
     if state.current is None:
         must_show_lowest = state.rules.first_lead_includes_lowest and not state.moves
         return not must_show_lowest or hand[0] in play.cards
-    if _is_locked(state, state.to_act):
+    if _is_locked(state, state.actor):
         return is_chop(play, state.current)
     return beats(play, state.current)
 
@@ -106,13 +106,16 @@ def _may_respond(state: GameState, seat: int) -> bool:
         return False
     if not _is_locked(state, seat):
         return True
-    return state.rules.chop_after_pass and any(
-        is_chop(play, state.current) for play in enumerate_plays(state.hands[seat])
+    current = state.current
+    return (
+        state.rules.chop_after_pass
+        and current is not None
+        and any(is_chop(play, current) for play in enumerate_plays(state.hands[seat]))
     )
 
 
 def _next_turn(state: GameState) -> GameState:
-    for seat in _ring(state.to_act, state.rules.n_players):
+    for seat in _ring(state.actor, state.rules.n_players):
         if seat == state.last_player:
             order = _ring(seat - 1, state.rules.n_players)
             return replace(
@@ -131,7 +134,7 @@ def _next_turn(state: GameState) -> GameState:
 def apply(state: GameState, play: Play) -> GameState:
     if not is_legal(state, play):
         raise IllegalPlay(f"seat {state.to_act} cannot play {format_cards(play.cards) or 'pass'}")
-    seat = state.to_act
+    seat = state.actor
     moves = (*state.moves, Move(seat, play))
     if play.is_pass:
         return _next_turn(replace(state, passed=state.passed | {seat}, moves=moves))

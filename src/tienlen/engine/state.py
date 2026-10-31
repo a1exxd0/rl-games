@@ -43,6 +43,12 @@ class GameState:
     moves: tuple[Move, ...] = ()
     round_start: int = 0
 
+    @property
+    def actor(self) -> int:
+        if self.to_act is None:
+            raise ValueError("the game is over")
+        return self.to_act
+
 
 @dataclass(frozen=True, slots=True)
 class PlayerView:
