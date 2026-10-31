@@ -2,5 +2,6 @@ data/
 .venv/
 __pycache__/
 dist/
+site/
 .pytest_cache/
 .hypothesis/

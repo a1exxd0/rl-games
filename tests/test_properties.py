@@ -57,6 +57,7 @@ def all_cards(state: GameState) -> list[int]:
 @given(rules_strategy, seeds, seeds)
 def test_games_terminate_and_conserve_cards(rules, seed, chooser):
     moves = 0
+    state = new_game(rules, seed)
     for state in random_states(rules, seed, chooser):
         moves = len(state.moves)
         assert moves <= MAX_MOVES
@@ -78,7 +79,7 @@ def test_every_legal_play_is_accepted_and_someone_can_always_act(rules, seed, ch
         for play in plays:
             assert is_legal(state, play)
             after = apply(state, play)
-            assert after.moves[-1] == Move(state.to_act, play)
+            assert after.moves[-1] == Move(state.actor, play)
 
 
 @settings(max_examples=100, deadline=None)

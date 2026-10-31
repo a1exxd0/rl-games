@@ -1,0 +1,21 @@
+[project]
+site_name = "Tien Len"
+nav = [{ "Engine API" = "index.md" }, { "Model evolution" = "evolution.md" }]
+
+[project.theme]
+features = ["content.code.copy"]
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/moon"
+toggle.name = "Dark mode"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/sun"
+toggle.name = "Light mode"
+
+[project.markdown_extensions]
+admonition = {}
+pymdownx.highlight = {}
+pymdownx.superfences = {}

@@ -12,6 +12,8 @@ BOTS_DIR = Path(__file__).parent.parent / "bots"
 
 def load_bot(name: str) -> TienLenBot:
     spec = importlib.util.spec_from_file_location(f"bot_{name}", BOTS_DIR / name / "bot.py")
+    assert spec is not None
+    assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module.create_bot(None)
@@ -31,7 +33,7 @@ def test_reference_bots_finish_games(name, n_players):
         bot.reset(seat, rules, seed=seat)
     state = new_game(rules, seed=11)
     while not is_over(state):
-        seat = state.to_act
+        seat = state.actor
         state = apply(state, bots[seat].act(view(state, seat), legal_plays(state)))
     assert sorted(placements(state)) == list(range(n_players))
 
@@ -57,7 +59,7 @@ def test_random_bot_is_seeded():
     first, second = load_bot("random"), load_bot("random")
     first.reset(0, state.rules, seed=7)
     second.reset(0, state.rules, seed=7)
-    seen = view(state, state.to_act)
+    seen = view(state, state.actor)
     assert [first.act(seen, legal) for _ in range(20)] == [
         second.act(seen, legal) for _ in range(20)
     ]

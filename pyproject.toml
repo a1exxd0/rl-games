@@ -19,10 +19,12 @@ tienlen = "tienlen.cli:app"
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.40.2",
     "complexipy",
     "hypothesis",
     "pytest",
     "ruff",
+    "zensical>=0.0.74",
 ]
 
 [build-system]
@@ -41,3 +43,9 @@ line-length = 100
 [tool.complexipy]
 paths = ["bots", "scripts", "src"]
 max-complexity-allowed = 10
+
+[tool.basedpyright]
+typeCheckingMode = "standard"
+include = ["bots", "scripts", "src", "tests", "web/py"]
+exclude = ["**/__pycache__", "web/dist"]
+pythonVersion = "3.12"

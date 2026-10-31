@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tiến Lên</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <header class="top">
+      <h1>Tiến Lên</h1>
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button type="button" role="tab" data-tab="game" aria-selected="true">Game</button>
+        <button type="button" role="tab" data-tab="models" aria-selected="false">Models</button>
+      </nav>
+      <p id="status" role="status">Starting</p>
+    </header>
+
+    <main id="game-view" class="layout">
+      <div class="play-area">
+        <div class="table-rim"><div id="table" class="table"></div></div>
+
+        <div class="controls">
+          <div id="auto-controls" class="group" hidden>
+            <button id="toggle" type="button" title="Space">Auto-play</button>
+            <button id="step" type="button">Step</button>
+          </div>
+          <div id="replay-controls" class="group" hidden>
+            <button id="back" type="button">Back</button>
+            <input id="cursor" type="range" min="0" value="0" aria-label="Replay position" />
+            <span id="cursor-label"></span>
+          </div>
+          <div id="human-controls" class="group" hidden>
+            <button id="play-selected" class="primary" type="button">Play selected</button>
+            <button id="pass" type="button">Pass</button>
+            <button id="clear" type="button">Clear</button>
+          </div>
+          <div class="group">
+            <label class="inline">
+              Speed
+              <select id="speed">
+                <option value="1400">Slow</option>
+                <option value="700" selected>Normal</option>
+                <option value="280">Fast</option>
+                <option value="0">Instant</option>
+              </select>
+            </label>
+            <button id="save-replay" type="button" hidden>Save replay</button>
+          </div>
+        </div>
+        <p id="details" class="details"></p>
+      </div>
+
+      <aside class="side">
+        <form id="setup" class="panel">
+          <h2>New game</h2>
+          <fieldset class="modes">
+            <legend>Mode</legend>
+            <label class="check"><input type="radio" name="mode" value="watch" checked /> Watch bots</label>
+            <label class="check"><input type="radio" name="mode" value="human" /> Play a bot</label>
+          </fieldset>
+          <label>
+            Players
+            <select id="players">
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </label>
+          <div id="seats" class="seats"></div>
+          <label>
+            Seed
+            <input id="seed" type="number" min="0" step="1" placeholder="Random" />
+          </label>
+          <details>
+            <summary>Rules</summary>
+            <div id="rules" class="rules"></div>
+          </details>
+          <button id="new-game" class="primary" type="submit" disabled>Start game</button>
+          <label class="file">
+            Open a replay file
+            <input id="replay-file" type="file" accept="application/json,.json" />
+          </label>
+        </form>
+
+        <section class="panel">
+          <h2>Moves</h2>
+          <ol id="log" class="log"></ol>
+        </section>
+      </aside>
+    </main>
+    <main id="models-view" class="models" hidden></main>
+  </body>
+</html>

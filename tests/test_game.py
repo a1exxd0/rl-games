@@ -36,7 +36,7 @@ def test_first_leader_holds_the_lowest_dealt_card(n_players):
     for seed in range(50):
         state = new_game(Rules(n_players=n_players), seed)
         lowest = min(card for hand in state.hands for card in hand)
-        assert lowest in state.hands[state.to_act]
+        assert lowest in state.hands[state.actor]
         assert state.first_leader == state.to_act
 
 
@@ -47,7 +47,7 @@ def test_same_seed_same_deal():
 
 def test_first_lead_must_include_the_lowest_card():
     state = new_game(Rules(), seed=1)
-    lowest = state.hands[state.to_act][0]
+    lowest = state.hands[state.actor][0]
     plays = legal_plays(state)
     assert plays
     assert all(lowest in p.cards for p in plays)
@@ -56,7 +56,7 @@ def test_first_lead_must_include_the_lowest_card():
 
 def test_first_lead_toggle_frees_the_opening():
     state = new_game(Rules(first_lead_includes_lowest=False), seed=1)
-    lowest = state.hands[state.to_act][0]
+    lowest = state.hands[state.actor][0]
     assert any(lowest not in p.cards for p in legal_plays(state))
 
 
@@ -318,18 +318,18 @@ def test_replay_rebuilds_the_game():
     moves = []
     while not is_over(state):
         chosen = legal_plays(state)[0]
-        moves.append(Move(state.to_act, chosen))
+        moves.append(Move(state.actor, chosen))
         state = apply(state, chosen)
     assert replay(Rules(), 4, moves) == state
 
 
 def test_replay_rejects_out_of_turn_moves():
     state = new_game(Rules(), seed=4)
-    wrong_seat = (state.to_act + 1) % 4
+    wrong_seat = (state.actor + 1) % 4
     with pytest.raises(IllegalPlay):
         replay(Rules(), 4, [Move(wrong_seat, legal_plays(state)[0])])
 
 
 def test_three_of_spades_opens_a_four_player_game():
     state = new_game(Rules(), seed=0)
-    assert parse_card("3S") in state.hands[state.to_act]
+    assert parse_card("3S") in state.hands[state.actor]
