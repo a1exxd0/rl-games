@@ -1,0 +1,43 @@
+[project]
+name = "tienlen"
+version = "0.1.0"
+description = "Tien Len engine, bot registry, and RL training environment"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy",
+    "openskill",
+    "pyiceberg[pyarrow,sql-sqlite]",
+    "typer",
+]
+
+[project.optional-dependencies]
+rl = ["torch"]
+
+[project.scripts]
+tienlen = "tienlen.cli:app"
+
+[dependency-groups]
+dev = [
+    "complexipy",
+    "hypothesis",
+    "pytest",
+    "ruff",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tienlen"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.complexipy]
+paths = ["bots", "scripts", "src"]
+max-complexity-allowed = 10
